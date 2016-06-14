@@ -7,5 +7,7 @@
 
 
 class WeatherspiderPipeline(object):
+
     def process_item(self, item, spider):
-        print(spider.__name__)
+
+    def process_province(self)
