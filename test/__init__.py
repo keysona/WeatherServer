@@ -4,4 +4,6 @@ import sys
 dirname = os.path.dirname
 sys.path.append(dirname(dirname(dirname(__file__))))
 
-from WeatherServer.api import Province, City, Country
+from WeatherServer.api import Province, City, Country,\
+                RealTimeInfo, TodayInfo, AqiInfo,\
+                IndexInfo, Forecast, WeatherInfo
