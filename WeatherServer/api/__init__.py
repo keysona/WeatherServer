@@ -1,2 +1,2 @@
 from .views import api
-from .models import *
+from .models import Province, City, Country
