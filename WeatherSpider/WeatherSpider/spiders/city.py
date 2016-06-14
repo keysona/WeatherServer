@@ -2,9 +2,9 @@ import scrapy
 import json
 
 
-class CitySpider(scrapy.Spider):
+class LocationSpider(scrapy.Spider):
 
-    name = 'city'
+    name = 'location'
     allowed_domains = ["tianqi.cn"]
     start_urls = [
         'http://3g.tianqi.cn/getAllCitys.do'
@@ -19,6 +19,6 @@ class CitySpider(scrapy.Spider):
 
 class WeatherInfoSpider(scrapy.Spider):
     name = 'weather'
-    base_url = 
+    base_url =
 
     def start_requests():
