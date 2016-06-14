@@ -6,6 +6,7 @@ class Province(db.Document):
     location_id = db.StringField(verbose_name='location_id',
                                  max_length=20,
                                  required=True,
+                                 primary_key=True,
                                  unique=True)
 
     name = db.StringField(verbose_name='省份',
@@ -23,6 +24,7 @@ class City(db.Document):
     location_id = db.StringField(verbose_name='location_id',
                                  max_length=20,
                                  required=True,
+                                 primary_key=True,
                                  unique=True)
 
     name = db.StringField(verbose_name='省份',
@@ -40,6 +42,7 @@ class Country(db.Document):
     location_id = db.StringField(verbose_name='location_id',
                                  max_length=20,
                                  required=True,
+                                 primary_key=True,
                                  unique=True)
 
     weather_id = db.StringField(verbose_name='weather_id',

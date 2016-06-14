@@ -16,16 +16,26 @@ def test_city():
     name = '白城'
     city = City.objects(location_id=location_id).first()
     assert city['name'] == name,\
-        "location_id wrong/location_id不匹配 : %s" % city
+        'name wrong/名称不匹配 : %s != %s' % (city, name)
 
     # Is this city in its province?
     province = Province.objects(location_id=location_id[:2]).first()
     assert city in province.cities,\
-        "%s not in %s" % (city, province.cities)
+        '%s not in %s' % (city, province.cities)
+
 
 def test_country():
-    pass
+    # <名称:长春 id-060101 weather-id-101060101>
+    location_id = '060101'
+    name = '长春'
+    country = Country.objects(location_id=location_id).first()
+    assert country['name'] == name,\
+        'name wrong/名称不匹配 : %s != %s' % (city, name)
 
+    # Is this country in its city?
+    city = City.objects(location_id=location_id[:4]).first()
+    assert country in city.countries,\
+        '%s not in %s' % (country, city.countries)
 
 
 def test_provinces_count():
@@ -44,12 +54,13 @@ def test_city_count():
     assert total == TOTAL,\
         'cities count wront/城市数量出错: (total)%d != (TOTAL)%d' % (total, TOTAL)
 
-# def test_country_count(provinces):
-#     t_country = 0
-#     r_country = Country.objects.all().count()
-#
-#     for province in provinces:
-#         for city in province['beans']:
-#             t_country += len(city['beans'])
-#     assert t_country == r_country,\
-#         'country count wront/县级市数量出错'
+
+def test_country_count():
+    TOTAL = 2501
+    total = 0
+
+    for city in City.objects:
+        total += len(city['countries'])
+
+    assert total == TOTAL,\
+        'countries count wront/城市数量出错: (total)%d != (TOTAL)%d' % (total, TOTAL)
