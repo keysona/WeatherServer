@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 class WeatherspiderPipeline(object):
 
     def process_item(self, item, spider):
+        self.logging = spider.logger
         if spider.name == 'provinces':
             return self.progress_province(item)
         elif spider.name == 'cities':
@@ -36,16 +37,26 @@ class WeatherspiderPipeline(object):
         return province
 
     def progress_city(self, data):
-        city = City.objects(location_id=data['id']).firse()
+        city = City.objects(location_id=data['id']).first()
         if city:
             return city
 
         city = City(
                 location_id=data['id'],
-                name=data['ch'],
+                name=data['name'],
                 countries=[]
             )
         city.save()
+        # add to province
+        # for example:
+        # city['location_id'] = 2903
+        # city['location_id'][:2] = 29
+        # 29 is the number of province that the city belongs to.
+        location_id = city['location_id'][:2]
+        province = Province.objects(location_id=location_id).first()
+        if city not in province.cities:
+            province.cities.append(city)
+            province.save()
         return city
 
     def progress_country(self, data):
@@ -55,8 +66,19 @@ class WeatherspiderPipeline(object):
 
         country = Country(
                         location_id=data['id'],
-                        weather_id=data['id'],
+                        weather_id=data['weather_id'],
                         name=data['name'],
                     )
         country.save()
+
+        # add to city
+        # for example:
+        # country['location_id'] = 290102
+        # country['location_id'][:4] = 2901
+        # 2901 is the number of city that the country belongs to.
+        location_id = country['location_id'][:4]
+        city = City.objects(location_id=location_id).first()
+        if country not in city.countries:
+            city.countries.append(country)
+            city.save()
         return country

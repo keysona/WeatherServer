@@ -32,7 +32,7 @@ class City(db.Document):
     countries = db.ListField(db.ReferenceField('Country'))
 
     def __unicode__(self):
-        return '<城市:%s (%s)>' % (self.name, self.id)
+        return '<城市:%s (%s)>' % (self.name, self.location_id)
 
 
 class Country(db.Document):
@@ -52,4 +52,5 @@ class Country(db.Document):
                           required=True)
 
     def __unicode__(self):
-        return '<名称:%s weather-id(%s)>' % (self.name, self.weather_id)
+        return '<名称:%s id-%s weather-id-%s>' % \
+            (self.name, self.location_id, self.weather_id)

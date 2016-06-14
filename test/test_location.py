@@ -5,22 +5,27 @@ from test import Province, City, Country
 
 def test_provinces():
     # <省份:香港 (32)>
-    r_province = Province.objects(location_id='32').first()
-    assert r_province['name'] == '香港',\
+    province = Province.objects(location_id='32').first()
+    assert province['name'] == '香港',\
         'province location_id wrong/省份location_id出现 : %s' % r_province
 
 
-# def test_city(provinces):
-#     t_city = provinces[0]['beans'][0]
-#     r_city = City.objects(weather_id=t_city['id']).first()
-#     assert t_city['en'] == r_city['en'], "weather_id wrong/weather_id不匹配"
-#
-#
-# def test_country(provinces):
-#     t_country = provinces[0]['beans'][0]['beans'][0]
-#     r_country = Country.objects(weather_id=t_country['id']).first()
-#     assert t_country['en'] == r_country['en'],\
-#         'country weather_id wrong/县级市weather_id出错'
+def test_city():
+    # <城市:白城 (0606)>
+    location_id = '0606'
+    name = '白城'
+    city = City.objects(location_id=location_id).first()
+    assert city['name'] == name,\
+        "location_id wrong/location_id不匹配 : %s" % city
+
+    # Is this city in its province?
+    province = Province.objects(location_id=location_id[:2]).first()
+    assert city in province.cities,\
+        "%s not in %s" % (city, province.cities)
+
+def test_country():
+    pass
+
 
 
 def test_provinces_count():
@@ -29,16 +34,16 @@ def test_provinces_count():
                         "provinces count wrong/省份数量出错"
 
 
-# def test_city_count(provinces):
-#     sum_internet = 0
-#
-#     for province in provinces:
-#         sum_internet += len(province['beans'])
-#
-#     assert sum_internet == City.objects.all().count(),\
-#         "city count wront/城市数量出错"
-#
-#
+def test_city_count():
+    TOTAL = 381
+    total = 0
+
+    for province in Province.objects:
+        total += len(province['cities'])
+
+    assert total == TOTAL,\
+        'cities count wront/城市数量出错: (total)%d != (TOTAL)%d' % (total, TOTAL)
+
 # def test_country_count(provinces):
 #     t_country = 0
 #     r_country = Country.objects.all().count()
