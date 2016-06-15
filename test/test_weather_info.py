@@ -78,9 +78,9 @@ def get_aqi(data):
 def get_realtime(data):
     time = datetime.strptime(data['time'], '%H:%M')
     realtime = RealTimeInfo(
-            SD=data['SD'],
-            WD=data['WD'],
-            WS=data['WS'],
+            humidity=data['SD'],
+            wind_direction=data['WD'],
+            wind_speed=data['WS'],
             temp=data['temp'],
             time=time,
             weather=data['weather']

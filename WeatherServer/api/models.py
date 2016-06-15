@@ -63,14 +63,14 @@ class Country(db.Document):
 
 class RealTimeInfo(db.EmbeddedDocument):
 
-    SD = db.StringField(verbose_name='湿度',
-                        max_length=10)
+    humidity = db.StringField(verbose_name='湿度',
+                              max_length=10)
 
-    WD = db.StringField(verbose_name='风向',
-                        max_length=10)
+    wind_direction = db.StringField(verbose_name='风向',
+                                    max_length=10)
 
-    WS = db.StringField(verbose_name='风力',
-                        max_length=10)
+    wind_speed = db.StringField(verbose_name='风力',
+                                max_length=10)
 
     temp = db.StringField(verbose_name='温度',
                           max_length=10)
@@ -101,7 +101,6 @@ class TodayInfo(db.EmbeddedDocument):
 
     wind_max = db.IntField(verbose_name='最大风力')
     wind_min = db.IntField(verbose_name='最小风力')
-
 
 
 class AqiInfo(db.EmbeddedDocument):
