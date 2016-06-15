@@ -103,6 +103,7 @@ class TodayInfo(db.EmbeddedDocument):
     wind_min = db.IntField(verbose_name='最小风力')
 
 
+
 class AqiInfo(db.EmbeddedDocument):
 
     pub_date = db.DateTimeField(verbose_name='更新日期')
@@ -128,6 +129,9 @@ class AqiInfo(db.EmbeddedDocument):
     spot = db.StringField(verbose_name='地点',
                           max_length=50)
 
+    def __unicode__(self):
+        return '空气质量: %s' % self.aqi
+
 
 class IndexInfo(db.EmbeddedDocument):
 
@@ -142,6 +146,9 @@ class IndexInfo(db.EmbeddedDocument):
 
     name = db.StringField(verbose_name='name',
                           max_length=20)
+
+    def __unicode__(self):
+        return '%s: %s' % (self.name, self.index)
 
 
 class Forecast(db.EmbeddedDocument):
@@ -160,13 +167,17 @@ class Forecast(db.EmbeddedDocument):
 
     week = db.StringField(verbose_name='星期几')
 
+    def __unicode__(self):
+        return '%s %s' % (self.week, self.weather)
+
 
 class WeatherInfo(db.EmbeddedDocument):
 
-    date = db.DateTimeField(verbose_name='日期',
+    date = db.DateTimeField(verbose_name='datetime',
                             required=True,
-                            primary_key=True,
                             unique=True)
+
+    week = db.StringField(verbose_name='星期几')
 
     today = db.EmbeddedDocumentField('TodayInfo',
                                      verbose_name='今天天气')
@@ -182,3 +193,8 @@ class WeatherInfo(db.EmbeddedDocument):
 
     forecast = db.EmbeddedDocumentListField('Forecast',
                                             verbose_name='预报信息')
+
+    def __unicode__(self):
+        date = self.date
+        return '%s-%s-%s %s' % (date.year, date.month,
+                                date.day, self,)

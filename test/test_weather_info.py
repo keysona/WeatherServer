@@ -25,16 +25,21 @@ def json():
 
 def test(json):
     date = json['today']['date']
+    _datetime = datetime.strptime(date, '%Y-%m-%d')
     city_name = json['forecast']['city']
     country = Country.objects(name=city_name).first()
-    country.weather_infos = []
     print(country)
-    weather_info = \
-        WeatherInfo(date=datetime.strptime('2016-06-14', '%Y-%m-%d'))
-    weather_info.today = get_today(json['today'])
-    weather_info.aqi = get_aqi(json['aqi'])
-    country.weather_infos.append(weather_info)
-    country.save()
+    if not country.weather_infos.filter(date=_datetime):
+        weather_info = \
+            WeatherInfo(date=_datetime,
+                        week=json['forecast']['week'],
+                        today=get_today(json['today']),
+                        realtime=get_realtime(json['realtime']),
+                        aqi=get_aqi(json['aqi']),
+                        index=get_index(json['index']),
+                        forecast=get_forecast(json['forecast']))
+        country.weather_infos.append(weather_info)
+        country.save()
 
 
 def get_today(data):
@@ -68,6 +73,75 @@ def get_aqi(data):
             spot=data['spot']
         )
     return aqi
+
+
+def get_realtime(data):
+    time = datetime.strptime(data['time'], '%H:%M')
+    realtime = RealTimeInfo(
+            SD=data['SD'],
+            WD=data['WD'],
+            WS=data['WS'],
+            temp=data['temp'],
+            time=time,
+            weather=data['weather']
+        )
+    return realtime
+
+
+def get_index(data):
+    res = []
+    for item in data:
+        index = IndexInfo(
+                        code=item['code'],
+                        details=item['details'],
+                        index=item['index'],
+                        name=item['name']
+                    )
+        res.append(index)
+    return res
+
+
+def get_forecast(data):
+    res = []
+    for i in range(1, 7):
+        forecast = Forecast(
+                        wind=data['fl%s' % str(i)],
+                        wind_detail=data['wind%s' % str(i)],
+                        temp=data['temp%s' % str(i)],
+                        weather=data['weather%s' % str(i)],
+                        week=get_week(data['week'], i)
+                        )
+        res.append(forecast)
+    return res
+
+
+def get_week(week, offset):
+    weeks_to_int = {
+        '星期一': 0,
+        '星期二': 1,
+        '星期三': 2,
+        '星期四': 3,
+        '星期五': 4,
+        '星期六': 5,
+        '星期日': 6
+        }
+    int_to_weeks = {
+        0: '星期一',
+        1: '星期二',
+        2: '星期三',
+        3: '星期四',
+        4: '星期五',
+        5: '星期六',
+        6: '星期日'
+        }
+    mod = (weeks_to_int[week] + offset) % 7
+    return int_to_weeks[mod]
+
+
+def test_get_week():
+    assert get_week('星期一', 3) == '星期四'
+
+    assert get_week('星期日', 4) == '星期四'
 
 if __name__ == '__main__':
     test(json())

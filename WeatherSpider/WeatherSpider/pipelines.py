@@ -68,6 +68,7 @@ class WeatherspiderPipeline(object):
                         location_id=data['id'],
                         weather_id=data['weather_id'],
                         name=data['name'],
+                        weather_infos=[]
                     )
         country.save()
 
