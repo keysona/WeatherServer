@@ -75,10 +75,12 @@ class RealTimeInfo(db.EmbeddedDocument):
     temp = db.StringField(verbose_name='温度',
                           max_length=10)
 
-    time = db.StringField(verbose_name='时间',
-                          max_length=10)
+    time = db.DateTimeField(verbose_name='当前时间')
 
     weather = db.StringField(verbose_name='天气')
+
+    def __unicode__(self):
+        return '%s:%s' % (self.time.hour, self.time.minute)
 
 
 class TodayInfo(db.EmbeddedDocument):
@@ -129,7 +131,8 @@ class AqiInfo(db.EmbeddedDocument):
                           max_length=50)
 
     def __unicode__(self):
-        return '空气质量: %s' % self.aqi
+        return '更新时间: %s:%s 空气质量: %s' % \
+            (self.pub_date.hour, self.pub_date.minute, self.aqi)
 
 
 class IndexInfo(db.EmbeddedDocument):
@@ -172,9 +175,9 @@ class Forecast(db.EmbeddedDocument):
 
 class WeatherInfo(db.EmbeddedDocument):
 
-    date = db.DateTimeField(verbose_name='datetime',
-                            required=True,
-                            unique=True)
+    datetime = db.DateTimeField(verbose_name='datetime',
+                                required=True,
+                                unique=True)
 
     week = db.StringField(verbose_name='星期几')
 
@@ -194,6 +197,6 @@ class WeatherInfo(db.EmbeddedDocument):
                                             verbose_name='预报信息')
 
     def __unicode__(self):
-        date = self.date
-        return '%s-%s-%s %s' % (date.year, date.month,
-                                date.day, self,)
+        date = self.datetime
+        return '%s-%s-%s' % (date.year, date.month,
+                             date.day)

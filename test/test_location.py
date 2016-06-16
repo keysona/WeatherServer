@@ -8,7 +8,7 @@ def test_provinces():
     # <省份:香港 (32)>
     province = Province.objects(location_id='32').first()
     assert province['name'] == '香港',\
-        'province location_id wrong/省份location_id出现 : %s' % r_province
+        'province location_id wrong/省份location_id出现 : %s' % province
 
 
 def test_city():

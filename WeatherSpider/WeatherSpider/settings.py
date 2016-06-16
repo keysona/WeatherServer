@@ -8,6 +8,8 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+import sys
+
 
 BOT_NAME = 'WeatherSpider'
 
@@ -65,7 +67,8 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'WeatherSpider.pipelines.WeatherspiderPipeline': 300,
+   'WeatherSpider.pipelines.WeatherLocationSpiderPipeline': 300,
+   'WeatherSpider.pipelines.WeatherInfoSpiderPipeline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
