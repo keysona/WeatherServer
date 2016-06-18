@@ -1,9 +1,6 @@
 import scrapy
 import json
-import sys
 from WeatherSpider import Country
-
-sys.setrecursionlimit(10000)
 
 
 class WeatherInfoSpider(scrapy.Spider):

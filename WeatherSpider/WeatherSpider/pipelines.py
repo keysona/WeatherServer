@@ -136,12 +136,20 @@ class WeatherInfoSpiderPipeline(object):
 
         self.update_realtime(weather_info, data['realtime'])
 
-        self.update_aqi(weather_info, data['aqi'])
+        if self.has_aqi(data['aqi']):
+            self.update_aqi(weather_info, data['aqi'])
+
+    def has_aqi(self, aqi):
+        if aqi:
+            logger.debug('no aqi data')
+            return True
+        return False
 
     def update_realtime(self, weather_info, data):
         _time = datetime.strptime(data['time'], '%H:%M')
         if weather_info.realtime.time != _time:
-            logger.debug('update realtime info')
+            logger.debug('update realtime info %s %s',
+                         weather_info.realtime.time, _time)
             weather_info.realtime = self.get_realtime(data)
 
     def update_aqi(self, weather_info, data):

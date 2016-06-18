@@ -7,6 +7,7 @@ Flask==0.11.1
 flask-mongoengine==0.7.5
 Flask-Script==2.0.5
 Flask-WTF==0.12
+gunicorn==19.6.0
 idna==2.1
 itsdangerous==0.24
 Jinja2==2.8
@@ -14,14 +15,17 @@ lxml==3.6.0
 MarkupSafe==0.23
 mongoengine==0.10.6
 parsel==1.0.2
+py==1.4.31
 pyasn1==0.1.9
 pyasn1-modules==0.0.8
 pycparser==2.14
 PyDispatcher==2.0.5
 pymongo==3.2.2
 pyOpenSSL==16.0.0
+pytest==2.9.2
 PyYAML==3.11
 queuelib==1.4.2
+requests==2.10.0
 Scrapy==1.1.0
 service-identity==16.0.0
 six==1.10.0
