@@ -18,7 +18,6 @@ class WeatherInfoSpider(scrapy.Spider):
                                     'location_id': country.location_id
                                  },
                                  callback=self.parse)
-            break
 
     def parse(self, response):
         data = json.loads(response.text)
