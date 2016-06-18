@@ -10,13 +10,12 @@ from WeatherSpider import Province, City, Country,\
                 RealTimeInfo, TodayInfo, AqiInfo,\
                 IndexInfo, Forecast, WeatherInfo
 
-logger = logging.getLogger(__name__)
-
 
 class WeatherLocationSpiderPipeline(object):
 
     def process_item(self, item, spider):
-        self.logging = spider.logger
+        self.logger = spider.logger
+        self.logger.debug('item : %s' % item)
         if spider.name == 'provinces':
             return self.progress_province(item)
         elif spider.name == 'cities':
@@ -27,9 +26,10 @@ class WeatherLocationSpiderPipeline(object):
             return item
 
     def progress_province(self, data):
-        province = Province.objects(location_id=data['id']).first()
+        self.logger.debug('data[id] : %s ' % data)
+        province = Province.objects(location_id=data['id'])
         if province:
-            return province
+            return province[0]
 
         province = Province(
                         location_id=data['id'],
@@ -40,9 +40,9 @@ class WeatherLocationSpiderPipeline(object):
         return province
 
     def progress_city(self, data):
-        city = City.objects(location_id=data['id']).first()
+        city = City.objects(location_id=data['id'])
         if city:
-            return city
+            return city[0]
 
         city = City(
                 location_id=data['id'],
@@ -63,9 +63,9 @@ class WeatherLocationSpiderPipeline(object):
         return city
 
     def progress_country(self, data):
-        country = Country.objects(location_id=data['id']).first()
+        country = Country.objects(location_id=data['id'])
         if country:
-            return country
+            return country[0]
 
         country = Country(
                         location_id=data['id'],
@@ -91,14 +91,15 @@ class WeatherLocationSpiderPipeline(object):
 class WeatherInfoSpiderPipeline(object):
 
     def process_item(self, item, spider):
-
+        self.logger = spider.logger
         if spider.name != 'weather-info':
-            return
+            return item
 
         country = Country.objects(location_id=item['location_id']).first()
         if not country:
-            logger.error('%s location_id is invalid' % item['location_id'])
-            return
+            self.logger.error('%s location_id is invalid'
+                              % item['location_id'])
+            return item
 
         self.progress_weather_info(country, item['data'])
 
@@ -107,9 +108,9 @@ class WeatherInfoSpiderPipeline(object):
 
         # maybe no data!
         if not date:
-            logger.error('%s-%s-%s no data' % (country.name,
-                                               country.location_id,
-                                               country.weather_id))
+            self.logger.error('%s-%s-%s no data' % (country.name,
+                                                    country.location_id,
+                                                    country.weather_id))
             return
 
         _datetime = datetime.strptime(date, '%Y-%m-%d')
@@ -141,15 +142,15 @@ class WeatherInfoSpiderPipeline(object):
 
     def has_aqi(self, aqi):
         if aqi:
-            logger.debug('no aqi data')
+            self.logger.debug('no aqi data')
             return True
         return False
 
     def update_realtime(self, weather_info, data):
         _time = datetime.strptime(data['time'], '%H:%M')
         if weather_info.realtime.time != _time:
-            logger.debug('update realtime info %s %s',
-                         weather_info.realtime.time, _time)
+            self.logger.debug('update realtime info %s %s',
+                              weather_info.realtime.time, _time)
             weather_info.realtime = self.get_realtime(data)
 
     def update_aqi(self, weather_info, data):
@@ -177,7 +178,7 @@ class WeatherInfoSpiderPipeline(object):
 
         # may be no aqi
         if 'pub_time' not in data:
-            logger.error('no aqi data')
+            self.logger.error('no aqi data')
             return
 
         datestr = data['pub_time']

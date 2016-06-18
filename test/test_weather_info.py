@@ -29,7 +29,7 @@ def test(json):
     city_name = json['forecast']['city']
     country = Country.objects(name=city_name).first()
     print(country)
-    if not country.weather_infos.filter(date=_datetime):
+    if not country.weather_infos.filter(datetime=_datetime):
         weather_info = \
             WeatherInfo(date=_datetime,
                         week=json['forecast']['week'],
