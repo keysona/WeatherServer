@@ -31,7 +31,7 @@ def test(json):
     print(country)
     if not country.weather_infos.filter(datetime=_datetime):
         weather_info = \
-            WeatherInfo(date=_datetime,
+            WeatherInfo(datetime=_datetime,
                         week=json['forecast']['week'],
                         today=get_today(json['today']),
                         realtime=get_realtime(json['realtime']),
