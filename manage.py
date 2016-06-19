@@ -32,6 +32,7 @@ def make_province(province):
         province_json['cities'].remove(id)
     return province_json
 
+
 def make_city(city):
     city_json = json.loads(city.to_json())
     del city_json['_id']
@@ -41,12 +42,13 @@ def make_city(city):
         city_json['countries'].remove(id)
     return city_json
 
+
 def make_country(country):
     country_json = json.loads(country.to_json())
     del country_json['_id']
+    del country_json['weather_id']
     del country_json['weather_infos']
     return country_json
-
 
 
 if __name__ == '__main__':
