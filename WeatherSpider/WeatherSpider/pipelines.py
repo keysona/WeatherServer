@@ -8,10 +8,12 @@ import logging
 from datetime import datetime
 from WeatherSpider import Province, City, Country,\
                 RealTimeInfo, TodayInfo, AqiInfo,\
-                IndexInfo, Forecast, WeatherInfo
+                IndexInfo, Forecast, WeatherInfo,\
+                now_china
 
 
 class WeatherLocationSpiderPipeline(object):
+
 
     def process_item(self, item, spider):
         self.logger = spider.logger
@@ -125,12 +127,13 @@ class WeatherInfoSpiderPipeline(object):
     def get_weather_info(self, _datetime, data):
         weather_info = \
             WeatherInfo(datetime=_datetime,
-                        week=data['forecast']['week'],
+                        week=self.now_week(),
                         today=self.get_today(data['today']),
                         realtime=self.get_realtime(data['realtime']),
                         aqi=self.get_aqi(data['aqi']),
                         index=self.get_index(data['index']),
                         forecast=self.get_forecast(data['forecast']))
+        self.logger.debug(weather_info['week'])
         return weather_info
 
     def update_weather_info(self, weather_info, data):
@@ -222,34 +225,43 @@ class WeatherInfoSpiderPipeline(object):
     def get_forecast(self, data):
         res = []
         for i in range(1, 7):
+            _now_week = self.now_week()
             forecast = Forecast(
                             wind=data['fl%s' % str(i)],
                             wind_detail=data['wind%s' % str(i)],
                             temp=data['temp%s' % str(i)],
                             weather=data['weather%s' % str(i)],
-                            week=self.get_week(data['week'], i)
+                            week=self.get_week(_now_week, i)
                             )
             res.append(forecast)
         return res
 
+    def now_week(self):
+        _int = now_china().weekday()
+        return self.int_to_week(_int)
+
     def get_week(self, week, offset):
-        weeks_to_int = {
-            '星期一': 0,
-            '星期二': 1,
-            '星期三': 2,
-            '星期四': 3,
-            '星期五': 4,
-            '星期六': 5,
-            '星期日': 6
-            }
-        int_to_weeks = {
-            0: '星期一',
-            1: '星期二',
-            2: '星期三',
-            3: '星期四',
-            4: '星期五',
-            5: '星期六',
-            6: '星期日'
-            }
-        mod = (weeks_to_int[week] + offset) % 7
-        return int_to_weeks[mod]
+        mod = (self.week_to_int(week) + offset) % 7
+        return self.int_to_week(mod)
+
+    def week_to_int(self, week):
+        return {
+                '星期一': 0,
+                '星期二': 1,
+                '星期三': 2,
+                '星期四': 3,
+                '星期五': 4,
+                '星期六': 5,
+                '星期日': 6
+            }[week]
+
+    def int_to_week(self, _int):
+        return {
+                0: '星期一',
+                1: '星期二',
+                2: '星期三',
+                3: '星期四',
+                4: '星期五',
+                5: '星期六',
+                6: '星期日'
+            }[_int]
