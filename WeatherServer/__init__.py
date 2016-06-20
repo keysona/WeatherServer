@@ -16,7 +16,9 @@ def create_app(setting_path=None):
 
 def register_blueprints(app):
     from .api import api
+    from .weather import weather
     app.register_blueprint(api)
+    app.register_blueprint(weather)
 
 
 app = create_app()

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Keysona{% endblock %}
+{% block container %}
+  <div class="container">
+    <div class="row section">
+
+      {% block content %}
+        <div class="col s12 l9">
+        {% with index = true %}
+          {% for post in posts %}
+            {% from 'components/post-card.html' import render_post_card %}
+            {{ render_post_card(post, index) }}
+          {% endfor %}
+        {% endwith %}
+        {# pagination #}
+        {% from 'components/pagination.html' import render_pagination %}
+          {% if posts %}
+            {{ render_pagination(pagination, 'blog.index') }}
+          {% endif %}
+        </div>
+      {% endblock %}
+
+      {% block aside %}
+        <aside class="col s12 offset-l9 l3">
+          {% include 'components/info.html' %}
+          {% from 'components/tag-list.html' import tag_list %}
+            {{ tag_list(tags) }}
+        </aside>
+      {% endblock %}
+
+    </div>
+  </div>
+{% endblock %}
