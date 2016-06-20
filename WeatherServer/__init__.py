@@ -21,11 +21,17 @@ def register_blueprints(app):
     app.register_blueprint(weather)
 
 
+def register_filters(app):
+    from .filters import get_image_name, format_time
+    app.jinja_env.filters['get_image_name'] = get_image_name
+    app.jinja_env.filters['format_time'] = format_time
+
 app = create_app()
 db = MongoEngine(app)
 
 # register
 register_blueprints(app)
+register_filters(app)
 
 if __name__ == '__main__':
     app.run()

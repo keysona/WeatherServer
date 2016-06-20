@@ -2,30 +2,51 @@
 {% block title %}Keysona{% endblock %}
 {% block container %}
   <div class="container">
-    <div class="row section">
 
       {% block content %}
-        <div class="col s12 l9">
-        {% with index = true %}
-          {% for post in posts %}
-            {% from 'components/post-card.html' import render_post_card %}
-            {{ render_post_card(post, index) }}
-          {% endfor %}
-        {% endwith %}
-        {# pagination #}
-        {% from 'components/pagination.html' import render_pagination %}
-          {% if posts %}
-            {{ render_pagination(pagination, 'blog.index') }}
+        <div class="col s12 offset-l1 l9" style="margin-top:50px;">
+          <div class="card hoverable" style="height:100px;padding:30px;">
+            <form action="." method="POST">
+              <div class="input-field">
+                <input id="search" name="country_name" placeholder="Input your city" type="search" required>
+                <label for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+          </div>
+          {% if ip %}
+            <div class="card hoverable" style="padding:20px;">
+              <div>
+                <h4 class="center-align"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ location }}</h4>
+                <h6 class="center-align">Your ip: {{ ip }}</h6>
+              </div>
+            </div>
           {% endif %}
-        </div>
-      {% endblock %}
 
-      {% block aside %}
-        <aside class="col s12 offset-l9 l3">
-          {% include 'components/info.html' %}
-          {% from 'components/tag-list.html' import tag_list %}
-            {{ tag_list(tags) }}
-        </aside>
+        <div class="row">
+          <div class="col s12 l6" >
+            <div class="card hoverable" style="height:400px">
+              <div class="card-title" style="padding:10px 15px;">
+                <span class="left">实时天气</span>
+                <span class="right new badge" style="font-size:20px;">{{realtime.time | format_time}}<span>
+              </div>
+              <div class="card-content">
+                <img style="height:230px;width:230px" src="{{ realtime.weather | get_image_name }}" alt="{{realtime.weather}}">
+              </div>
+            </div>
+          </div>
+          <div class="col s12 l6">
+            <div class="card hoverable" style="height:400px">
+              <div class="card-title" style="padding:10px 15px">
+                <span class="left">实时空气质量</span>
+                <span class="right new badge" style="font-size:20px;">{{aqi.pub_date | format_time}}<span>
+              </div>
+              <div class="card-content">
+
+              </div>
+            </div>
+          </div>
+        </div>
       {% endblock %}
 
     </div>

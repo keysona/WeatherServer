@@ -25,6 +25,24 @@ def make_json():
         f.write(json.dumps(res))
 
 
+@manager.command
+def get_weather():
+    weather_set = set()
+    for country in Country.objects:
+        if country.weather_infos:
+            weather_info = country.weather_infos[-1]
+            realtime = weather_info.realtime
+            forecasts = weather_info.forecast
+            weather = realtime.weather
+            if weather and weather not in weather_set:
+                weather_set.add(weather)
+            # if forecasts:
+            #     for forecast in forecasts:
+            #         if forecast.weather not in weather_set:
+            #             weather_set.add(forecast.weather)
+    print(weather_set)
+
+
 def make_province(province):
     province_json = json.loads(province.to_json())
     del province_json['_id']
