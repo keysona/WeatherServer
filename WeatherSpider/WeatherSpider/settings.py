@@ -24,7 +24,7 @@ NEWSPIDER_MODULE = 'WeatherSpider.spiders'
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 16
+CONCURRENT_REQUESTS = 6
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -70,12 +70,14 @@ DOWNLOAD_TIMEOUT = 2
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'WeatherSpider.pipelines.WeatherLocationSpiderPipeline': 300,
-   'WeatherSpider.pipelines.WeatherInfoSpiderPipeline': 300
+   'WeatherSpider.pipelines.WeatherInfoSpiderPipeline': 300,
+   'WeatherSpider.pipelines.WeatherHistoryPipline': 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
+
+EAUTOTHROTTLE_ENABLED = True
 # The initial download delay
 #AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies

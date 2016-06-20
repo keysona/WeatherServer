@@ -200,3 +200,44 @@ class WeatherInfo(db.EmbeddedDocument):
         date = self.datetime
         return '%s-%s-%s' % (date.year, date.month,
                              date.day)
+
+
+class WeatherHistoryInfo(db.EmbeddedDocument):
+
+    date = db.StringField(required=True,
+                          unique=True,
+                          max_length=30,
+                          verbose_name='日期')
+
+    datetime = db.DateTimeField(required=True)
+
+    temp_min = db.StringField(verbose_name='最低气温',
+                              max_length=30)
+
+    temp_max = db.StringField(verbose_name='最高气温',
+                              max_length=30)
+
+    weather = db.StringField(verbose_name='天气描述',
+                             max_length=50)
+
+    wind_direction = db.StringField(verbose_name='风向',
+                                    max_length=30)
+
+    wind_speed = db.StringField(verbose_name='风力',
+                                max_length=30)
+
+    def __unicode__(self):
+        return '<%s>' % self.date
+
+
+class WeatherHistory(db.Document):
+
+    country = db.StringField(required=True,
+                             unique=True,
+                             max_length=20)
+
+    history_infos = db.EmbeddedDocumentListField('WeatherHistoryInfo',
+                                                 verbose_name='历史天气')
+
+    def __unicode__(self):
+        return '<%s>' % self.country

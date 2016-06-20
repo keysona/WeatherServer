@@ -9,7 +9,38 @@ from datetime import datetime
 from WeatherSpider import Province, City, Country,\
                 RealTimeInfo, TodayInfo, AqiInfo,\
                 IndexInfo, Forecast, WeatherInfo,\
+                WeatherHistoryInfo, WeatherHistory,\
                 now_china
+
+
+class WeatherHistoryPipline(object):
+
+    def process_item(self, item, spider):
+        self.logger = spider.logger
+        if spider.name != 'weather-history':
+            return item
+
+        country = WeatherHistory.objects(country=item['country']).first()
+        if not country:
+            country = WeatherHistory(country=item['country'])
+            country.save()
+
+        for data in item['weathers']:
+            _datetime = datetime.strptime(data['date'], '%Y-%m-%d')
+            if country.history_infos.filter(datetime=_datetime):
+                self.logger.debug('<%s> %s has been insert' % (country.country,
+                                                               data['date']))
+            weather = WeatherHistoryInfo(date=data['date'],
+                                         datetime=_datetime,
+                                         temp_max=data['temp_max'],
+                                         temp_min=data['temp_min'],
+                                         weather=data['weather'],
+                                         wind_direction=data['wind_direction'],
+                                         wind_speed=data['wind_speed'],
+                                         )
+            country.history_infos.append(weather)
+        country.save()
+        self.logger.debug('save success: <%s> %s' % (item['country'], item['weathers'][0]['date']))
 
 
 class WeatherLocationSpiderPipeline(object):

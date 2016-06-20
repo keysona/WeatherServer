@@ -1,4 +1,5 @@
 from .views import api
 from .models import Province, City, Country,\
                     RealTimeInfo, TodayInfo, AqiInfo,\
-                    IndexInfo, Forecast, WeatherInfo
+                    IndexInfo, Forecast, WeatherInfo,\
+                    WeatherHistoryInfo, WeatherHistory

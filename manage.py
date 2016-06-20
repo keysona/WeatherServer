@@ -1,17 +1,18 @@
 from flask_script import Manager, Server, Shell
-from WeatherServer.api import Province, City, Country
+from WeatherServer.api import Province, City, Country, WeatherHistory
 from WeatherServer import app
 import json
 
 
 def _make_context():
     return dict(Province=Province, City=City,
-                Country=Country)
+                Country=Country, WeatherHistory=WeatherHistory)
 
 manager = Manager(app)
 manager.add_command('runserver', Server(host='0.0.0.0', port='5000',
                                         use_debugger=True))
 manager.add_command('shell', Shell(make_context=_make_context))
+
 
 @manager.command
 def make_json():
@@ -20,8 +21,9 @@ def make_json():
         province_json = make_province(province)
         provinces.append(province_json)
     res = dict(provinces=provinces)
-    with open('locations.json','w') as f:
+    with open('locations.json', 'w') as f:
         f.write(json.dumps(res))
+
 
 def make_province(province):
     province_json = json.loads(province.to_json())
