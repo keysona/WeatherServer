@@ -30,12 +30,20 @@ def register_filters(app):
     app.jinja_env.filters['get_aqi_tips'] = get_aqi_tips
 
 
+def register_admin(app):
+    from .admin import create_admin, init_login
+    admin = create_admin(name='weather', template_mode='bootstrap3')
+    admin.init_app(app)
+    init_login(app)
+
+
 app = create_app()
 db = MongoEngine(app)
 
 # register
 register_blueprints(app)
 register_filters(app)
+register_admin(app)
 
 if __name__ == '__main__':
     app.run()

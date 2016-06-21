@@ -1,5 +1,6 @@
-from flask_script import Manager, Server, Shell
+from flask_script import Manager, Server, Shell, prompt_pass
 from WeatherServer.api import Province, City, Country, WeatherHistory
+from WeatherServer.admin import AdminUser
 from WeatherServer import app
 import json
 
@@ -41,6 +42,23 @@ def get_weather():
             #         if forecast.weather not in weather_set:
             #             weather_set.add(forecast.weather)
     print(weather_set)
+
+
+@manager.command
+def superuser():
+    """Create a superuser.
+       Default account is admin@test.com, password is admin."""
+    email = prompt_pass("Input your email.(Default is admin@test.com)",
+                        default='admin@test.com')
+    password = prompt_pass("Input your passwod.(Default is admin)",
+                           default='admin')
+    user = AdminUser.objects(email=email).first()
+    if user is None:
+        user = AdminUser(email=email, username='admin', password=password)
+        user.save()
+        print('Create successful')
+    else:
+        print('Fail to create, maybe create a another new one?')
 
 
 def make_province(province):
