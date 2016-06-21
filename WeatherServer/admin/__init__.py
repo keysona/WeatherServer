@@ -18,7 +18,9 @@ def init_login(app):
 
 
 def create_admin(*args, **kwargs):
-    admin = Admin(index_view=AdminHomeView(endpoint='admin'), *args, **kwargs)
+    admin = Admin(index_view=AdminHomeView(endpoint='admin',
+                                           url='/weather/admin'),
+                                          *args, **kwargs)
     admin.add_view(ProvinceView(Province))
     admin.add_view(CityView(City))
     admin.add_view(CountryView(Country))
