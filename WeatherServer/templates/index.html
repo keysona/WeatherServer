@@ -25,24 +25,91 @@
 
         <div class="row">
           <div class="col s12 l6" >
-            <div class="card hoverable" style="height:400px">
-              <div class="card-title" style="padding:10px 15px;">
+            <div class="card middle hoverable" style="height:340px;">
+              <div class="card-title" style="height:75px;padding:20px;">
                 <span class="left">实时天气</span>
                 <span class="right new badge" style="font-size:20px;">{{realtime.time | format_time}}<span>
               </div>
-              <div class="card-content">
-                <img style="height:230px;width:230px" src="{{ realtime.weather | get_image_name }}" alt="{{realtime.weather}}">
+              <div class="card-content light-blue darken-1 white-text" style="clear: both">
+                <div class="center" style="clear:both;">
+                  <img style="width:150px; height:150px;" src="{{ realtime.weather | get_image_name }}" alt="{{realtime.weather}}">
+                  <br>
+                  <span class="" style="font-size:28px;">{{realtime.temp}}℃ </span>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="" style="font-size:22px;">{{realtime.humidity}}</span>
+                </div>
+                <div class="center">
+                  <span class="" style="font-size:20px;"><i class="fa fa-flag" aria-hidden="true"></i> &nbsp;&nbsp;{{realtime.wind_direction}}/{{realtime.wind_speed}}</span>
+                </div>
               </div>
             </div>
           </div>
           <div class="col s12 l6">
-            <div class="card hoverable" style="height:400px">
-              <div class="card-title" style="padding:10px 15px">
-                <span class="left">实时空气质量</span>
-                <span class="right new badge" style="font-size:20px;">{{aqi.pub_date | format_time}}<span>
+            <div class="card middle hoverable" style="height:340px;">
+              <div class="card-title" style="height:70px;padding:20px;">
+                  <span class="left">实时空气质量</span>
+                  <span class="right new badge" style="font-size:20px;">{{aqi.pub_date | format_time}}<span>
               </div>
+              <div class="card-content" style="clear: both">
+                <div class="center">
+                  <h1 style="font-size:5em;">{{ aqi.aqi | get_aqi_type }}</h1>
+                  <h5>AQI: 35</h5>
+                </div>
+                <div style="padding:20px 0px;">
+                  <span class="left" >
+                    <i class="fa fa-map-marker" aria-hidden="true"></i> 中国气象检测站
+                  </span>
+                  <span class="card-title activator right" style="line-height:20px;"><i class="material-icons">more_vert</i></span>
+                </div>
+              </div>
+              <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">详细信息<i class="material-icons right">close</i></span>
+                <ul class="collection with-header">
+                  <li class="collection-item"><div>PM2.5<span class="secondary-content">{{aqi.pm25}}</span></div></li>
+                  <li class="collection-item"><div>PM10<span class="secondary-content">{{aqi.pm10}}</span></div></li>
+                  <li class="collection-item"><div>SO2(二氧化硫)<span class="secondary-content">{{aqi.so2}}</span></div></li>
+                  <li class="collection-item"><div>NO2(二氧化氮)<span class="secondary-content">{{aqi.no2}}</span></div></li>
+                </ul>
+                <div>
+                  <p><i class="fa fa-paper-plane" aria-hidden="true"></i> {{ aqi.aqi | get_aqi_tips }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 l6" >
+            <div class="card hoverable" style="padding:20px;">
+                <div class="card-title">生活指数</div>
+                  <ul class="collapsible" data-collapsible="accordion">
+                    {% for index in indexs %}
+                      <li>
+                        <div class="collapsible-header">{{index.name}} <span class="right">{{index.index}}</span></div>
+                        <div class="collapsible-body"><p>{{index.details}}</p></div>
+                      </li>
+                    {% endfor %}
+                  </ul>
+              </div>
+          </div>
+          <div class="col s12 l6">
+            <div class="card hoverable" style="padding:20px;">
+              <div class="card-title">未来五天天气预报</div>
               <div class="card-content">
-
+                {% for forecast in forecasts %}
+                  <div class="card" style="height:100px;padding-left:10px;">
+                    <div class="right" style="padding:15px;">
+                      <span class="right">{{ forecast.weather }}</span>
+                      <br>
+                      <span class="right">{{ forecast.temp }}</span>
+                      <br>
+                      <span class="right">{{ forecast.wind_detail }}</span>
+                    </div>
+                    <img class="right" style="height:100px;width:100px;margin-right:20px;" src="{{ forecast.weather | get_image_name }}" alt="">
+                    <div class="left" style="padding-top:30px;margin-left:10px;">
+                        <span style="font-size:25px;">{{ forecast.week }}</span>
+                    </div>
+                  </div>
+                {% endfor %}
               </div>
             </div>
           </div>

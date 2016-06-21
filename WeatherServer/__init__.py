@@ -22,9 +22,13 @@ def register_blueprints(app):
 
 
 def register_filters(app):
-    from .filters import get_image_name, format_time
+    from .filters import get_image_name, format_time,\
+                         get_aqi_type, get_aqi_tips
     app.jinja_env.filters['get_image_name'] = get_image_name
     app.jinja_env.filters['format_time'] = format_time
+    app.jinja_env.filters['get_aqi_type'] = get_aqi_type
+    app.jinja_env.filters['get_aqi_tips'] = get_aqi_tips
+
 
 app = create_app()
 db = MongoEngine(app)

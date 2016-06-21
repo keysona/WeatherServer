@@ -21,20 +21,19 @@ class IndexView(MethodView):
                     return jsonify(message='No data!')
         if country.weather_infos:
             weather_info = country.weather_infos[-1]
-            realtime = weather_info.realtime
-            aqi = weather_info.aqi
-            print(aqi.pub_date)
-            return render_template('index.html',
-                                   **{'ip': ip,
-                                      'location': ' '.join(locations),
-                                      'realtime': realtime,
-                                      'aqi': aqi})
+            index_context = make_index_context(weather_info)
+            index_context['ip'] = ip
+            index_context['location'] = ' '.join(locations)
+            return render_template('index.html', **index_context)
 
     def post(self):
         country_name = request.form.get('country_name')
         country = get_country(country_name)
         if country:
-            return render_template('index.html')
+            weather = country.weather_infos[-1]
+            index_context = make_index_context(weather)
+            index_context['location'] = country.name
+            return render_template('index.html', **index_context)
         return render_template('index.html')
 
 weather.add_url_rule('/', view_func=IndexView.as_view('index'))
@@ -79,3 +78,14 @@ def get_country(country_name):
         if city:
             return city.countries[0]
         return None
+
+
+def make_index_context(weather):
+    realtime = weather.realtime
+    aqi = weather.aqi
+    indexs = weather.index
+    forecasts = None
+    if weather.forecast:
+        forecasts = weather.forecast[:5]
+    return dict(realtime=realtime, aqi=aqi,
+                indexs=indexs, forecasts=forecasts)
