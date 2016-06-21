@@ -14,15 +14,17 @@
               </div>
             </form>
           </div>
-          {% if ip %}
-            <div class="card hoverable" style="padding:20px;">
-              <div>
-                <h4 class="center-align"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ location }}</h4>
-                <h6 class="center-align">Your ip: {{ ip }}</h6>
-              </div>
-            </div>
-          {% endif %}
-
+        <div class="card hoverable" style="padding:20px;">
+          <div>
+            {% if location %}
+            <h4 class="center-align"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ location }}</h4>
+            {% endif %}
+            {% if ip %}
+              <h6 class="center-align">Your ip: {{ ip }}</h6>
+            {% endif %}
+          </div>
+        </div>
+        {% if realtime %}
         <div class="row">
           <div class="col s12 l6" >
             <div class="card middle hoverable" style="height:340px;">
@@ -114,7 +116,9 @@
             </div>
           </div>
         </div>
+        {% endif %}
       {% endblock %}
+
 
     </div>
   </div>
