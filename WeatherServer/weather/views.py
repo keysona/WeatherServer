@@ -15,16 +15,17 @@ class IndexView(MethodView):
     def get(self):
         ip = get_real_ip()
         locations = get_location(ip)
-        if len(locations) == 3:
+        if locations and len(locations) == 3:
             country = get_country(locations[2])
             if not country:
                     return jsonify(message='No data!')
-        if country.weather_infos:
+        if country and country.weather_infos:
             weather_info = country.weather_infos[-1]
             index_context = make_index_context(weather_info)
             index_context['ip'] = ip
             index_context['location'] = ' '.join(locations)
             return render_template('index.html', **index_context)
+        return render_template('index.html')
 
     def post(self):
         country_name = request.form.get('country_name')
