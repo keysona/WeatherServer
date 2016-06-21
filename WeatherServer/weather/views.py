@@ -15,6 +15,7 @@ class IndexView(MethodView):
     def get(self):
         ip = get_real_ip()
         locations = get_location(ip)
+        country = None
         if locations and len(locations) == 3:
             country = get_country(locations[2])
             if not country:
