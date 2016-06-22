@@ -44,6 +44,19 @@ def get_aqi_type(aqi):
     else:
         return '严重污染'
 
+
+def get_aqi_color(aqi):
+    colors = {
+        '优': '#1de9b6',
+        '良': '#69f0ae',
+        '轻度污染': '#e57373',
+        '中度污染': '#ef5350 ',
+        '重度污染': '#f44336',
+        '严重污染': '#e53935',
+        }
+    type = get_aqi_type(aqi)
+    return colors[type]
+
 def get_aqi_tips(aqi):
     tips = {
         '优': '此时空气质量令人满意，基本无空气污染，各类人群可正常活动。',

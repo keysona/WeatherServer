@@ -45,6 +45,17 @@ def get_weather():
 
 
 @manager.command
+def save_json():
+    c = WeatherHistory.objects.all()[100]
+    from collections import defaultdict
+    temp = defaultdict()
+    for weather in c.history_infos:
+        year, month, year_month_str = get_year_month(weather)
+        
+
+
+
+@manager.command
 def superuser():
     """Create a superuser.
        Default account is admin@test.com, password is admin."""
@@ -87,6 +98,13 @@ def make_country(country):
     del country_json['weather_id']
     del country_json['weather_infos']
     return country_json
+
+
+def get_year_month(weather):
+    _datetime = weather.datetime
+    year, month = _datetime.year, _datetime.month
+    year_month_str = '%s%s' % (year, month)
+    return year, month, year_month_str
 
 
 if __name__ == '__main__':

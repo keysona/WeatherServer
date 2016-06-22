@@ -54,7 +54,7 @@
               </div>
               <div class="card-content" style="clear: both">
                 <div class="center">
-                  <h1 style="font-size:5em;">{{ aqi.aqi | get_aqi_type }}</h1>
+                  <h1 style="font-size:5em;color: {{ aqi.aqi | get_aqi_color }};">{{ aqi.aqi | get_aqi_type }}</h1>
                   <h5>AQI: 35</h5>
                 </div>
                 <div style="padding:20px 0px;">
@@ -80,9 +80,32 @@
           </div>
         </div>
         <div class="row">
+          <div class="col s12 l6">
+            <div class="card hoverable" style="">
+              <div class="card-title forecast-header" style="height:70px;padding:20px;">未来五天天气预报</div>
+                <div class="card-content" style="padding:20px">
+                  {% for forecast in forecasts %}
+                    <div class="card f{{ loop.index }}-header" style="height:100px;padding-left:10px;">
+                      <div class="right" style="padding:15px;">
+                        <span class="right">{{ forecast.weather }}</span>
+                        <br>
+                        <span class="right">{{ forecast.temp }}</span>
+                        <br>
+                        <span class="right">{{ forecast.wind_detail }}</span>
+                      </div>
+                      <img class="right" style="height:100px;width:100px;margin-right:20px;" src="{{ forecast.weather | get_image_name }}" alt="">
+                      <div class="left" style="padding-top:30px;margin-left:10px;">
+                          <span style="font-size:25px;">{{ forecast.week }}</span>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+          </div>
           <div class="col s12 l6" >
-            <div class="card hoverable" style="padding:20px;">
-                <div class="card-title">生活指数</div>
+            <div class="card hoverable" style="">
+                <div class="card-title index-header" style="height:70px;padding:20px;">生活指数</div>
+                <div class="content" style="padding:20px;">
                   <ul class="collapsible" data-collapsible="accordion">
                     {% for index in indexs %}
                       <li>
@@ -91,30 +114,10 @@
                       </li>
                     {% endfor %}
                   </ul>
+                </div>
               </div>
           </div>
-          <div class="col s12 l6">
-            <div class="card hoverable" style="padding:20px;">
-              <div class="card-title">未来五天天气预报</div>
-              <div class="card-content">
-                {% for forecast in forecasts %}
-                  <div class="card" style="height:100px;padding-left:10px;">
-                    <div class="right" style="padding:15px;">
-                      <span class="right">{{ forecast.weather }}</span>
-                      <br>
-                      <span class="right">{{ forecast.temp }}</span>
-                      <br>
-                      <span class="right">{{ forecast.wind_detail }}</span>
-                    </div>
-                    <img class="right" style="height:100px;width:100px;margin-right:20px;" src="{{ forecast.weather | get_image_name }}" alt="">
-                    <div class="left" style="padding-top:30px;margin-left:10px;">
-                        <span style="font-size:25px;">{{ forecast.week }}</span>
-                    </div>
-                  </div>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
+
         </div>
         {% endif %}
       {% endblock %}
