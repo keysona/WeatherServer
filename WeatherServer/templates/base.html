@@ -23,7 +23,30 @@
     <title>{% block title %}{% endblock %}</title>
     <style>
       body{
-        min-width: 400px;
+        min-width: 360px;
+      }
+      @media screen and (min-width:400px){
+        .weekday{
+          font-size:1.8em;
+          padding-top:30px;
+          margin-left:10px;
+        }
+        .week-image{
+          height:100px;
+          width:100px;
+          margin-right:20px;
+        }
+      }
+      @media screen and (max-width:400px){
+        .weekday{
+          font-size:1.5em;
+          padding-top:40px;
+          margin-left:0px;
+        }
+        .week-image{
+          height:100px;
+          width:100px;
+        }
       }
     </style>
     {% endblock %}

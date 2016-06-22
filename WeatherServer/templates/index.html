@@ -96,9 +96,9 @@
                         <br>
                         <span class="right">{{ forecast.wind_detail }}</span>
                       </div>
-                      <img class="right" style="height:100px;width:100px;margin-right:5px;" src="{{ forecast.weather | get_image_name }}" alt="">
-                      <div class="left" style="padding-top:30px;margin-left:10px;">
-                          <span style="font-size:2em;">{{ forecast.week }}</span>
+                      <img class="right week-image" src="{{ forecast.weather | get_image_name }}" alt="">
+                      <div class="left weekday" style="">
+                          <span style="" class="">{{ forecast.week }}</span>
                       </div>
                     </div>
                   {% endfor %}
