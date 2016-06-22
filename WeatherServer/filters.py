@@ -6,6 +6,13 @@ def format_time(datetime):
     return hour + ':' + minute
 
 
+def format_datetime(datetime):
+    year = str(datetime.year)
+    month = str(datetime.month)
+    day = str(datetime.day)
+    return '%s年%s月%s日' % (year, month, day)
+
+
 def get_image_name(weather):
     data = {'晴': 'img/sun.png',
             '雷': 'img/storm.png',

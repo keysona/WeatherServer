@@ -22,6 +22,9 @@
             {% if ip %}
               <h6 class="center-align">Your ip: {{ ip }}</h6>
             {% endif %}
+            {% if date %}
+              <h5 class="center-align" style="color: #00b8d4;">{{ date | format_datetime }} {{ week }}</h5>
+            {% endif %}
           </div>
         </div>
         {% if realtime %}

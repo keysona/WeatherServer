@@ -91,7 +91,10 @@ def make_index_context(weather):
     aqi = weather.aqi
     indexs = weather.index
     forecasts = None
+    date = weather.datetime
+    week = weather.week
     if weather.forecast:
         forecasts = weather.forecast[:5]
     return dict(realtime=realtime, aqi=aqi,
-                indexs=indexs, forecasts=forecasts)
+                indexs=indexs, forecasts=forecasts,
+                date=date, week=week)
